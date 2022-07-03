@@ -28,6 +28,6 @@ class PublicIntegrationViewSet(viewsets.GenericViewSet):
         if request.data["type"] == "url_verification":
             return Response({"challenge": request.data["challenge"]})
 
-        handle_slack_event(request.data)
+        handle_slack_event.delay(request.data)
 
         return Response({"status": "ok"})
