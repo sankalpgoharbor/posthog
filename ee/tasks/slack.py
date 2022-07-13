@@ -84,12 +84,10 @@ def _handle_slack_event(event_payload: Any) -> None:
 
     if unfurls:
         try:
-            slack_integration.client.chat_unfurl(unfurls=unfurls, unfurl_id=unfurl_id, source=source, channel="", ts="")
+            params = dict(unfurls=unfurls, unfurl_id=unfurl_id, source=source, channel=channel, ts=message_ts)
+            slack_integration.client.chat_unfurl(**params)
         except Exception as e:
-            # NOTE: This is temporary as a test to understand if the channel and ts are actually required as the docs are not clear
-            slack_integration.client.chat_unfurl(
-                unfurls=unfurls, unfurl_id=unfurl_id, source=source, channel=channel, ts=message_ts
-            )
+            logger.error(f"Slack unfurl failed with params {params}")
             raise e
 
 
